@@ -39,7 +39,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide phone number"],
   },
-  Profession: {
+  profession: {
     type: String,
     required: [true, "Please provide profession"],
   },
@@ -68,12 +68,12 @@ UserSchema.methods.comparePassword = async function (canditatePassword) {
   return isMatch;
 };
 
-UserSchema.plugin(mongooseIntlPhoneNumber, {
-  hook: "validate",
-  internationalFormat: "internationalFormat",
-  phoneNumberField: "phoneNumber",
-  nationalFormatField: "nationalFormat",
-  countryCodeField: "countryCode",
-});
+// UserSchema.plugin(mongooseIntlPhoneNumber, {
+//   hook: "validate",
+//   internationalFormat: "internationalFormat",
+//   phoneNumberField: "phoneNumber",
+//   nationalFormatField: "nationalFormat",
+//   countryCodeField: "countryCode",
+// });
 
 module.exports = mongoose.model("User", UserSchema);
