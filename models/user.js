@@ -39,16 +39,17 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please provide address"],
   },
   phoneNumber: {
-    type: mongoose.SchemaTypes.Phone,
+    // type: mongoose.SchemaTypes.Phone,
+    type: [mongoose.SchemaTypes.Phone, "invalid phone number"],
     unique: true,
     required: [true, "Please provide phone number"],
-
-    // validate: {
-    //   validator: function () {
-    //     isValidPhone();
-    //   },
-    //   // message: (props) => `${props.value} is not a valid phone number!`,
-    // },
+    allowedNumberTypes: [
+      mongooseTypePhone.PhoneNumberType.MOBILE,
+      mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
+    ],
+    phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
+    defaultRegion: "NG",
+    parseOnGet: false,
   },
   profession: {
     type: String,
@@ -87,13 +88,5 @@ UserSchema.methods.comparePassword = async function (canditatePassword) {
 UserSchema.plugin(uniqueValidator, {
   message: "{PATH} already exist",
 });
-
-// UserSchema.plugin(mongooseIntlPhoneNumber, {
-//   hook: "validate",
-//   internationalFormat: "internationalFormat",
-//   phoneNumberField: "phoneNumber",
-//   nationalFormatField: "nationalFormat",
-//   countryCodeField: "countryCode",
-// });
 
 module.exports = mongoose.model("User", UserSchema);

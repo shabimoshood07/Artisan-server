@@ -5,25 +5,22 @@ const { BadRequestError, UnauthenticatedError } = require("../errors");
 const signup = async (req, res) => {
   try {
     const user = await User.create({ ...req.body });
-    // console.log(user);
-    res.send(user);
+    const token = user.createJWT();
+    res.status(StatusCodes.CREATED).json({
+      user: {
+        name: user.name,
+        username: user.username,
+        userId: user._id,
+        phoneNumber: user.phoneNumber,
+        email: user.email,
+        address: user.address,
+        profession: user.profession,
+      },
+      token,
+    });
   } catch (error) {
     res.send(error);
   }
-  // res.send(req);
-  // const token = user.createJWT();
-  // res.status(StatusCodes.CREATED).json({
-  //   user: {
-  //     name: user.name,
-  //     username: user.username,
-  //     userId: user._id,
-  //     phoneNumber: user.phoneNumber,
-  //     email: user.email,
-  //     address: user.address,
-  //     profession: user.profession,
-  //   },
-  //   token,
-  // });
 
   // res.status(StatusCodes.CREATED).json({ user: { name: user.name }, token });
 };
