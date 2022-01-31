@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mongooseIntlPhoneNumber = require("mongoose-intl-phone-number");
+var uniqueValidator = require("mongoose-unique-validator");
+const { isValidPhone } = require("phone-validation");
+var mongooseTypePhone = require("mongoose-type-phone");
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -13,7 +16,7 @@ const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     required: [true, "Please provide name"],
-    unique: [true, "User already exists"],
+    unique: true,
     maxlength: 50,
     minlength: 3,
   },
@@ -24,7 +27,7 @@ const UserSchema = new mongoose.Schema({
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
       "Please provide a valid email",
     ],
-    unique: [true, "User already exists"],
+    unique: true,
   },
   password: {
     type: String,
@@ -36,12 +39,25 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please provide address"],
   },
   phoneNumber: {
-    type: String,
+    type: mongoose.SchemaTypes.Phone,
+    unique: true,
     required: [true, "Please provide phone number"],
+
+    // validate: {
+    //   validator: function () {
+    //     isValidPhone();
+    //   },
+    //   // message: (props) => `${props.value} is not a valid phone number!`,
+    // },
   },
   profession: {
     type: String,
     required: [true, "Please provide profession"],
+  },
+  gender: {
+    type: String,
+    required: [true, "Please select  gender"],
+    enum: ["male", "female"],
   },
 });
 
@@ -67,6 +83,10 @@ UserSchema.methods.comparePassword = async function (canditatePassword) {
   const isMatch = await bcrypt.compare(canditatePassword, this.password);
   return isMatch;
 };
+
+UserSchema.plugin(uniqueValidator, {
+  message: "{PATH} already exist",
+});
 
 // UserSchema.plugin(mongooseIntlPhoneNumber, {
 //   hook: "validate",
