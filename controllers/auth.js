@@ -26,16 +26,23 @@ const signup = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  // const { email, password, phoneNumber } = req.body;
+  // const {({$or:[{email:email},{phoneNumber:phoneNumber}]}), password} = req.body
+
   const {
-    $or: [email, phoneNumber],
+    $or: [{ email: email }, { phoneNumber: phoneNumber }],
     password,
   } = req.body;
 
   if (!email || !password) {
-    throw new BadRequestError("Please provide email and password");
+    throw new BadRequestError(
+      "Please provide email or phone number and password"
+    );
   }
 
-  const user = await User.findOne({ $or: [email, phoneNumber] }).collation({
+  const user = await User.findOne({
+    $or: [{ email: email }, { phoneNumber: phoneNumber }],
+  }).collation({
     locale: "en",
     strength: 2,
   });
@@ -53,7 +60,7 @@ const login = async (req, res) => {
   const token = user.createJWT();
 
   res.json({
-    user: { name: user.name, email: user.email, role: user.role },
+    user: { name: user.name, email: user.email, profession: user.profession },
     token,
   });
 };

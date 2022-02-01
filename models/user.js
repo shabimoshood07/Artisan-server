@@ -39,7 +39,6 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please provide address"],
   },
   phoneNumber: {
-    // type: mongoose.SchemaTypes.Phone,
     type: [mongoose.SchemaTypes.Phone, "invalid phone number"],
     unique: true,
     required: [true, "Please provide phone number"],
