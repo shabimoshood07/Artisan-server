@@ -68,14 +68,14 @@ const UserSchema = new mongoose.Schema({
       type: [mongoose.SchemaTypes.Phone, "invalid phone number"],
       phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
 
-      // unique: true,
-      // required: false,
-      // allowedNumberTypes: [
-      //   mongooseTypePhone.PhoneNumberType.MOBILE,
-      //   mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
-      // ],
-      // defaultRegion: "NG",
-      // parseOnGet: false,
+      unique: true,
+      required: false,
+      allowedNumberTypes: [
+        mongooseTypePhone.PhoneNumberType.MOBILE,
+        mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
+      ],
+      defaultRegion: "NG",
+      parseOnGet: false,
     },
 
     // type: [mongoose.SchemaTypes.Phone, "invalid phone number"],
