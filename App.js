@@ -3,10 +3,18 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 
+// middleware
+// error handler
+const errorHandlerMiddleware = require("./middleware/error-handler");
+const notFoundMiddleware = require("./middleware/not-found");
+
 const authRouter = require("./routes/auth");
 app.use(express.json());
 // Routes
 app.use("/api/v1/auth", authRouter);
+
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 // connet db
 const port = process.env.PORT || 5000;
