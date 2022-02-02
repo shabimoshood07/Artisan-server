@@ -29,15 +29,30 @@ const login = async (req, res) => {
   // const { email, password, phoneNumber } = req.body;
   // const {({$or:[{email:email},{phoneNumber:phoneNumber}]}), password} = req.body
 
-  const {
-    $or: [{ email: email }, { phoneNumber: phoneNumber }],
-    password,
-  } = req.body;
+  let phoneNumber = req.body.phoneNumber;
+  let email = req.body.email;
+  // let username = req.body.username;
+  let password = req.body.password;
 
-  if (!email || !password) {
-    throw new BadRequestError(
-      "Please provide email or phone number and password"
-    );
+  // const {
+  //   $or: [{ email: email }, { phoneNumber: phoneNumber }],
+  //   password,
+  // } = req.body;
+
+  // if (!email || !password) {
+  //   throw new BadRequestError(
+  //     "Please provide email or phone number and password"
+  //   );
+  // }
+  if (!email) {
+    if (!phoneNumber) {
+      throw new BadRequestError(
+        "Please provide email or phone number and password"
+      );
+    }
+  }
+  if (!password) {
+    throw new BadRequestError("Please provide password");
   }
 
   const user = await User.findOne({
