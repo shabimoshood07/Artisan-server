@@ -6,7 +6,19 @@ var uniqueValidator = require("mongoose-unique-validator");
 const { isValidPhone } = require("phone-validation");
 var mongooseTypePhone = require("mongoose-type-phone");
 
+const childSchema = new mongoose.Schema({
+  about: {
+    type: String,
+    maxlength: 5000,
+  },
+  age: {
+    type: Number,
+  },
+});
+
 const UserSchema = new mongoose.Schema({
+  // children: [childSchema],
+
   name: {
     type: String,
     required: [true, "Please provide name"],
@@ -39,16 +51,43 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please provide address"],
   },
   phoneNumber: {
-    type: [mongoose.SchemaTypes.Phone, "invalid phone number"],
-    unique: true,
-    required: [true, "Please provide phone number"],
-    allowedNumberTypes: [
-      mongooseTypePhone.PhoneNumberType.MOBILE,
-      mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
-    ],
-    phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
-    defaultRegion: "NG",
-    parseOnGet: false,
+    work: {
+      type: [mongoose.SchemaTypes.Phone, "invalid phone number"],
+      unique: true,
+      required: [true, "Please provide phone number"],
+      allowedNumberTypes: [
+        mongooseTypePhone.PhoneNumberType.MOBILE,
+        mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
+      ],
+      phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
+      defaultRegion: "NG",
+      parseOnGet: false,
+    },
+
+    home: {
+      type: [mongoose.SchemaTypes.Phone, "invalid phone number"],
+      phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
+
+      // unique: true,
+      // required: false,
+      // allowedNumberTypes: [
+      //   mongooseTypePhone.PhoneNumberType.MOBILE,
+      //   mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
+      // ],
+      // defaultRegion: "NG",
+      // parseOnGet: false,
+    },
+
+    // type: [mongoose.SchemaTypes.Phone, "invalid phone number"],
+    // unique: true,
+    // required: [true, "Please provide phone number"],
+    // allowedNumberTypes: [
+    //   mongooseTypePhone.PhoneNumberType.MOBILE,
+    //   mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
+    // ],
+    // phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
+    // defaultRegion: "NG",
+    // parseOnGet: false,
   },
   profession: {
     type: String,
@@ -59,6 +98,8 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please select  gender"],
     enum: ["male", "female"],
   },
+
+  details: childSchema,
 });
 
 // hash password
