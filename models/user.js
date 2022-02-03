@@ -6,7 +6,7 @@ var uniqueValidator = require("mongoose-unique-validator");
 const { isValidPhone } = require("phone-validation");
 var mongooseTypePhone = require("mongoose-type-phone");
 
-const childSchema = new mongoose.Schema({
+const detailsSchema = new mongoose.Schema({
   about: {
     type: String,
     maxlength: 5000,
@@ -17,8 +17,6 @@ const childSchema = new mongoose.Schema({
 });
 
 const UserSchema = new mongoose.Schema({
-  // children: [childSchema],
-
   name: {
     type: String,
     required: [true, "Please provide name"],
@@ -99,7 +97,8 @@ const UserSchema = new mongoose.Schema({
     enum: ["male", "female"],
   },
 
-  details: childSchema,
+  details: detailsSchema,
+  // children: [childSchema],
 });
 
 // hash password
