@@ -10,7 +10,14 @@ const getAllArtisan = async (req, res) => {
   if (address) {
     queryObject.address = address;
   }
-  const artisan = await User.find({}).sort("_id").select("profession details");
+  let result = User.find(queryObject).collation({
+    locale: "en",
+    strength: 2,
+  });
+
+  const artisan = await result
+    .sort("profession")
+    .select("profession details phoneNumber{work home} email address");
   res
     .status(StatusCodes.OK)
     .json({ artisan: { artisan }, count: artisan.length });
