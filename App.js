@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+const cors = require("cors");
+
 const express = require("express");
 const app = express();
 
@@ -11,6 +13,8 @@ const notFoundMiddleware = require("./middleware/not-found");
 const authRouter = require("./routes/auth");
 const artisanRouter = require("./routes/artisan");
 app.use(express.json());
+app.use(cors());
+
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/artisan", artisanRouter);
@@ -33,7 +37,7 @@ const start = async () => {
 };
 
 app.get("/", (req, res) => {
-  res.send('<h1>Parcel delivery API</h1><a href="/api-docs">Documentation</a>');
+  res.send('<h1>Artisan API</h1><a href="/api-docs">Documentation</a>');
 });
 
 start();
