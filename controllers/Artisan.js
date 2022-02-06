@@ -5,10 +5,10 @@ const getAllArtisan = async (req, res) => {
   const { profession, address, sort } = req.query;
   const queryObject = {};
   if (profession) {
-    queryObject.profession = profession;
+    queryObject.profession = { $regex: profession, $options: "i" };
   }
   if (address) {
-    queryObject.address = address;
+    queryObject.address = { $regex: address, $options: "i" };
   }
   let result = User.find(queryObject).collation({
     locale: "en",
@@ -17,7 +17,9 @@ const getAllArtisan = async (req, res) => {
 
   const artisan = await result
     .sort("profession")
-    .select("profession details phoneNumber{work home} email address");
+    .select(
+      "profession details phoneNumber.work phoneNumber.home email address username"
+    );
   res
     .status(StatusCodes.OK)
     .json({ artisan: { artisan }, count: artisan.length });
