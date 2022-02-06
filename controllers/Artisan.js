@@ -24,16 +24,13 @@ const getAllArtisan = async (req, res) => {
     .select(
       "profession details phoneNumber.work phoneNumber.home email address username"
     );
-  res
-    .status(StatusCodes.OK)
-    .json({ artisan: { artisan }, count: artisan.length });
+  res.status(StatusCodes.OK).json({ artisan });
 };
 
 const getArtisan = async (req, res) => {
   const { id } = req.params;
   const artisan = await User.findById({ _id: id });
   if (!artisan) {
-    // throw new BadRequestError(`Artisan not found`);
     throw new NotFoundError("Artisan not found");
   }
   res.status(StatusCodes.OK).json({ artisan });
