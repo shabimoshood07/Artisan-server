@@ -1,6 +1,10 @@
 const User = require("../models/user");
 const { StatusCodes } = require("http-status-codes");
-
+const {
+  BadRequestError,
+  UnauthenticatedError,
+  NotFoundError,
+} = require("../errors");
 const getAllArtisan = async (req, res) => {
   const { profession, address, sort } = req.query;
   const queryObject = {};
@@ -26,7 +30,13 @@ const getAllArtisan = async (req, res) => {
 };
 
 const getArtisan = async (req, res) => {
-  console.log("one artisan");
+  const { id } = req.params;
+  const artisan = await User.findById({ _id: id });
+  if (!artisan) {
+    // throw new BadRequestError(`Artisan not found`);
+    throw new NotFoundError("Artisan not found");
+  }
+  res.status(StatusCodes.OK).json({ artisan });
 };
 
 module.exports = {
