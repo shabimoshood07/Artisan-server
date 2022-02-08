@@ -12,6 +12,8 @@ const notFoundMiddleware = require("./middleware/not-found");
 
 const authRouter = require("./routes/auth");
 const artisanRouter = require("./routes/artisan");
+app.use('/uploads', express.static('uploads'));
+
 app.use(express.json());
 app.use(cors());
 

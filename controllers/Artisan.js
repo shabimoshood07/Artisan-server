@@ -22,7 +22,7 @@ const getAllArtisan = async (req, res) => {
   const artisan = await result
     .sort("profession")
     .select(
-      "profession details phoneNumber.work phoneNumber.home email address username"
+      "profession details phoneNumber.work phoneNumber.home email address username profileImage"
     );
   res.status(StatusCodes.OK).json({ artisan });
 };
