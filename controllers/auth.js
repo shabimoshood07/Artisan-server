@@ -1,21 +1,22 @@
 const User = require("../models/user");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
-const multer = require('multer');
-
+const multer = require("multer");
+const cloudinary = require("../cloudinary");
+const fs = require("fs");
 
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, './uploads/');
+  destination: function (req, file, cb) {
+    cb(null, "./uploads/");
   },
-  filename: function(req, file, cb) {
-    cb(null,file.originalname);
-  }
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + file.originalname);
+  },
 });
 
 const fileFilter = (req, file, cb) => {
   // reject a file
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true);
   } else {
     cb(null, false);
@@ -25,17 +26,24 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 * 5
+    fileSize: 1024 * 1024 * 5,
   },
-  fileFilter: fileFilter
+  fileFilter: fileFilter,
 });
-
-
 
 const signup = async (req, res) => {
   try {
-    const user = await User.create({ ...req.body, profileImage: req.file.path });
-    console.log(req.file)
+    const uploader = async (path) =>
+      await cloudinary.uploads(path, "profileImage");
+    let files = req.file;
+    const newPath = await uploader(req.file.path);
+    fs.unlinkSync(req.file.path);
+
+    const user = await User.create({
+      ...req.body,
+      profileImage: newPath.url,
+    });
+
     const token = user.createJWT();
     res.status(StatusCodes.CREATED).json({
       user: {
@@ -49,7 +57,7 @@ const signup = async (req, res) => {
         profession: user.profession,
         about: user.details.about,
         age: user.details.age,
-        profileImage:req.file.path
+        profileImage: user.profileImage,
       },
       token,
     });
@@ -108,5 +116,5 @@ const login = async (req, res) => {
 module.exports = {
   signup,
   login,
-  upload
+  upload,
 };

@@ -3,6 +3,7 @@ require("dotenv").config();
 const cors = require("cors");
 
 const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 
 // middleware
@@ -12,7 +13,10 @@ const notFoundMiddleware = require("./middleware/not-found");
 
 const authRouter = require("./routes/auth");
 const artisanRouter = require("./routes/artisan");
-app.use('/uploads', express.static('uploads'));
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use("/uploads", express.static("uploads"));
 
 app.use(express.json());
 app.use(cors());
