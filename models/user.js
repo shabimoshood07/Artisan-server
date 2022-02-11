@@ -16,6 +16,21 @@ const detailsSchema = new mongoose.Schema({
   },
 });
 
+// const socialsSchema = new mongoose.Schema({
+//   facebook: {
+//     type: String,
+//     default: "#",
+//   },
+//   instagram: {
+//     type: String,
+//     default: "#",
+//   },
+//   twitter: {
+//     type: String,
+//     default: "#",
+//   },
+// });
+
 const UserSchema = new mongoose.Schema(
   {
     name: {
@@ -86,17 +101,32 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Please select  gender"],
       enum: ["male", "female"],
     },
-
+    socials: {
+      facebook: {
+        type: String,
+        default: "#",
+      },
+      instagram: {
+        type: String,
+        default: "#",
+      },
+      twitter: {
+        type: String,
+        default: "#",
+      },
+    },
     details: detailsSchema,
     profileImage: {
       type: String,
-      default:
-        "https://res.cloudinary.com/xabi007/image/upload/v1644484061/profileImage/avatar-g2b4feb965_1280_qbyhur.png",
+      // default:
+      //   "https://res.cloudinary.com/xabi007/image/upload/v1644484061/profileImage/avatar-g2b4feb965_1280_qbyhur.png",
     },
   },
 
   { timestamps: true }
 );
+
+// socials: socialsSchema,
 
 // hash password
 UserSchema.pre("save", async function () {

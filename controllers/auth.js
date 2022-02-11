@@ -1,95 +1,54 @@
 const User = require("../models/user");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
-const multer = require("multer");
-const cloudinary = require("../cloudinary");
-const fs = require("fs");
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + file.originalname);
-  },
-});
-
-const fileFilter = (req, file, cb) => {
-  // reject a file
-  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-    cb(null, true);
-  } else {
-    cb(null, true);
-  }
-};
-
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1024 * 1024 * 5,
-  },
-  fileFilter: fileFilter,
-});
 
 const signup = async (req, res) => {
-  let files = req.file;
-  try {
-    if (files) {
-      const uploader = async (path) =>
-        await cloudinary.uploads(path, "profileImage");
-      const newPath = await uploader(req.file.path);
-      fs.unlinkSync(req.file.path);
+  const user = await User.create({
+    ...req.body,
+    profileImage: path,
+  });
+  const token = user.createJWT();
+  res.status(StatusCodes.CREATED).json({ user, token });
 
-      const user = await User.create({
-        ...req.body,
-        profileImage: newPath.url,
-      });
+  // res.status(StatusCodes.CREATED).json({
+  //   user: {
+  //     name: user.name,
+  //     username: user.username,
+  //     userId: user._id,
+  //     phoneNumberWork: user.phoneNumber.work[0],
+  //     phoneNumberHome: user.phoneNumber.home[0],
+  //     email: user.email,
+  //     address: user.address,
+  //     profession: user.profession,
+  //     about: user.details.about,
+  //     age: user.details.age,
+  //     profileImage: user.profileImage,
+  //     facebookUrl: user.socials.facebook,
+  //   },
+  //   token,
+  // });
 
-      const token = user.createJWT();
-      res.status(StatusCodes.CREATED).json({
-        user: {
-          name: user.name,
-          username: user.username,
-          userId: user._id,
-          phoneNumberWork: user.phoneNumber.work[0],
-          phoneNumberHome: user.phoneNumber.home[0],
-          email: user.email,
-          address: user.address,
-          profession: user.profession,
-          about: user.details.about,
-          age: user.details.age,
-          profileImage: user.profileImage,
-        },
-        token,
-      });
-    } else {
-      const user = await User.create({
-        ...req.body,
-        profileImage:
-          "https://res.cloudinary.com/xabi007/image/upload/v1644484061/profileImage/avatar-g2b4feb965_1280_qbyhur.png",
-      });
-      const token = user.createJWT();
-      res.status(StatusCodes.CREATED).json({
-        user: {
-          name: user.name,
-          username: user.username,
-          userId: user._id,
-          phoneNumberWork: user.phoneNumber.work[0],
-          phoneNumberHome: user.phoneNumber.home[0],
-          email: user.email,
-          address: user.address,
-          profession: user.profession,
-          about: user.details.about,
-          age: user.details.age,
-          profileImage: user.profileImage,
-        },
-        token,
-      });
-    }
-  } catch (error) {
-    res.send(error);
-  }
+  // res.status(StatusCodes.CREATED).json({
+  //   user: {
+  //     name: user.name,
+  //     username: user.username,
+  //     userId: user._id,
+  //     phoneNumberWork: user.phoneNumber.work[0],
+  //     phoneNumberHome: user.phoneNumber.home[0],
+  //     email: user.email,
+  //     address: user.address,
+  //     profession: user.profession,
+  //     about: user.details.about,
+  //     age: user.details.age,
+  //     profileImage: user.profileImage,
+  //   },
+  //   token,
+  // });
+  res.status(StatusCodes.CREATED).json({ user, token });
 
+  // } catch (error) {
+  //   res.send(error);
+  // }
   // res.status(StatusCodes.CREATED).json({ user: { name: user.name }, token });
 };
 
@@ -141,5 +100,4 @@ const login = async (req, res) => {
 module.exports = {
   signup,
   login,
-  upload,
 };
