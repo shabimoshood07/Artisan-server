@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-// const mongooseIntlPhoneNumber = require("mongoose-intl-phone-number");
 var uniqueValidator = require("mongoose-unique-validator");
-// const { isValidPhone } = require("phone-validation");
 var mongooseTypePhone = require("mongoose-type-phone");
 
 const detailsSchema = new mongoose.Schema({
@@ -64,33 +62,33 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide address"],
     },
-    phoneNumber: {
-      work: {
-        type: [mongoose.SchemaTypes.Phone, "invalid phone number"],
-        unique: true,
-        required: [true, "Please provide phone number"],
-        allowedNumberTypes: [
-          mongooseTypePhone.PhoneNumberType.MOBILE,
-          mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
-        ],
-        phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
-        defaultRegion: "NG",
-        parseOnGet: false,
-      },
+    workPhoneNumber: {
+      type: [mongoose.SchemaTypes.Phone, "invalid phone number"],
+      required: [true, "Please provide phone number"],
+      unique: true,
+      allowedNumberTypes: [
+        mongooseTypePhone.PhoneNumberType.MOBILE,
+        mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
+      ],
+      allowBlank: false,
+      phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
+      defaultRegion: "NG",
+      parseOnGet: false,
+    },
 
-      home: {
-        type: [mongoose.SchemaTypes.Phone, "invalid phone number"],
-        phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
+    homePhoneNumber: {
+      type: mongoose.SchemaTypes.Phone,
+      required: false,
+      // phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
 
-        unique: true,
-        required: false,
-        allowedNumberTypes: [
-          mongooseTypePhone.PhoneNumberType.MOBILE,
-          mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
-        ],
-        defaultRegion: "NG",
-        parseOnGet: false,
-      },
+      allowBlank: true,
+      unique: true,
+      // allowedNumberTypes: [
+      //   mongooseTypePhone.PhoneNumberType.MOBILE,
+      //   mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
+      // ],
+      defaultRegion: "NG",
+      parseOnGet: false,
     },
     profession: {
       type: String,

@@ -14,15 +14,14 @@ const profileImage = async (req, res, next) => {
   if (req.file) {
     const result = await cloudinary.uploader.upload(req.file.path, {
       use_filename: true,
-      folder: "upload/profileImage",
+      folder: "profileImage",
     });
     fs.unlinkSync(req.file.path);
     path = result.secure_url;
-    console.log(result);
     next();
   } else {
-    path = y5t;
-    ("https://res.cloudinary.com/xabi007/image/upload/v1644484061/profileImage/avatar-g2b4feb965_1280_qbyhur.png");
+    path =
+      "https://res.cloudinary.com/xabi007/image/upload/v1644484061/profileImage/avatar-g2b4feb965_1280_qbyhur.png";
     next();
   }
 };
