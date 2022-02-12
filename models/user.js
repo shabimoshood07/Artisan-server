@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const mongooseIntlPhoneNumber = require("mongoose-intl-phone-number");
+// const mongooseIntlPhoneNumber = require("mongoose-intl-phone-number");
 var uniqueValidator = require("mongoose-unique-validator");
-const { isValidPhone } = require("phone-validation");
+// const { isValidPhone } = require("phone-validation");
 var mongooseTypePhone = require("mongoose-type-phone");
 
 const detailsSchema = new mongoose.Schema({
@@ -41,7 +41,7 @@ const UserSchema = new mongoose.Schema(
     },
     username: {
       type: String,
-      required: [true, "Please provide name"],
+      required: [true, "Please provide company name or username"],
       unique: true,
       maxlength: 50,
       minlength: 3,
@@ -118,8 +118,6 @@ const UserSchema = new mongoose.Schema(
     details: detailsSchema,
     profileImage: {
       type: String,
-      // default:
-      //   "https://res.cloudinary.com/xabi007/image/upload/v1644484061/profileImage/avatar-g2b4feb965_1280_qbyhur.png",
     },
   },
 

@@ -11,25 +11,18 @@ cloudinary.config({
 });
 
 const profileImage = async (req, res, next) => {
-  // console.log(req.file);
   if (req.file) {
-    const result = await cloudinary.uploader.upload(
-      // req.files.image.tempFilePath,
-      req.file.path,
-      {
-        use_filename: true,
-        folder: "uploads",
-      }
-    );
-    console.log(result);
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      use_filename: true,
+      folder: "upload/profileImage",
+    });
     fs.unlinkSync(req.file.path);
-    // return res.status(StatusCodes.OK).json({ image: { src: result.secure_url } });
     path = result.secure_url;
-    // console.log(path);
+    console.log(result);
     next();
   } else {
-    path =
-      "https://res.cloudinary.com/xabi007/image/upload/v1644484061/profileImage/avatar-g2b4feb965_1280_qbyhur.png";
+    path = y5t;
+    ("https://res.cloudinary.com/xabi007/image/upload/v1644484061/profileImage/avatar-g2b4feb965_1280_qbyhur.png");
     next();
   }
 };
