@@ -14,6 +14,7 @@ const notFoundMiddleware = require("./middleware/not-found");
 
 const authRouter = require("./routes/auth");
 const artisanRouter = require("./routes/artisan");
+const regUserRouter = require("./routes/regUserAuth");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -25,6 +26,7 @@ app.use(cors());
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/artisan", artisanRouter);
+app.use("/api/v1/artisan/regUser", regUserRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

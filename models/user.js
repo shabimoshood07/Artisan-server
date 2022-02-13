@@ -14,21 +14,6 @@ const detailsSchema = new mongoose.Schema({
   },
 });
 
-// const socialsSchema = new mongoose.Schema({
-//   facebook: {
-//     type: String,
-//     default: "#",
-//   },
-//   instagram: {
-//     type: String,
-//     default: "#",
-//   },
-//   twitter: {
-//     type: String,
-//     default: "#",
-//   },
-// });
-
 const UserSchema = new mongoose.Schema(
   {
     name: {
@@ -121,8 +106,6 @@ const UserSchema = new mongoose.Schema(
 
   { timestamps: true }
 );
-
-// socials: socialsSchema,
 
 // hash password
 UserSchema.pre("save", async function () {
