@@ -23,6 +23,10 @@ app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(cors());
 
+app.get("/", (req, res) => {
+  res.send("Artisan API");
+});
+
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/artisan", artisanRouter);
@@ -46,7 +50,7 @@ const start = async () => {
 };
 
 app.get("/", (req, res) => {
-  res.send('<h1>Artisan API</h1><a href="/api-docs">Documentation</a>');
+  res.send("Artisan API");
 });
 
 start();

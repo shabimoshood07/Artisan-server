@@ -4,23 +4,35 @@ const jwt = require("jsonwebtoken");
 var uniqueValidator = require("mongoose-unique-validator");
 var mongooseTypePhone = require("mongoose-type-phone");
 
-const detailsSchema = new mongoose.Schema({
-  about: {
-    type: String,
-    maxlength: 5000,
-  },
-  age: {
-    type: Number,
-  },
-});
+// const detailsSchema = new mongoose.Schema({
+
+// });
 
 const UserSchema = new mongoose.Schema(
   {
+    phoneNumber: {
+      unique: true,
+      type: mongoose.SchemaTypes.Phone,
+      required: "Please provide phone number",
+      allowBlank: false,
+      allowedNumberTypes: [
+        mongooseTypePhone.PhoneNumberType.MOBILE,
+        mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
+      ],
+      phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
+      defaultRegion: "NG",
+      parseOnGet: false,
+    },
     name: {
       type: String,
       required: [true, "Please provide name"],
       maxlength: 50,
       minlength: 3,
+    },
+    role: {
+      type: String,
+      default: "Artisan",
+      required: true,
     },
     username: {
       type: String,
@@ -41,40 +53,13 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Please provide password"],
-      minlength: 6,
+      minlength: [6, "Password should be at least six characters"],
     },
     address: {
       type: String,
       required: [true, "Please provide address"],
     },
-    workPhoneNumber: {
-      type: [mongoose.SchemaTypes.Phone, "invalid phone number"],
-      required: [true, "Please provide phone number"],
-      unique: true,
-      allowedNumberTypes: [
-        mongooseTypePhone.PhoneNumberType.MOBILE,
-        mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
-      ],
-      allowBlank: false,
-      phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
-      defaultRegion: "NG",
-      parseOnGet: false,
-    },
 
-    homePhoneNumber: {
-      type: mongoose.SchemaTypes.Phone,
-      required: false,
-      // phoneNumberFormat: mongooseTypePhone.PhoneNumberFormat.INTERNATIONAL,
-
-      allowBlank: true,
-      unique: true,
-      // allowedNumberTypes: [
-      //   mongooseTypePhone.PhoneNumberType.MOBILE,
-      //   mongooseTypePhone.PhoneNumberType.FIXED_LINE_OR_MOBILE,
-      // ],
-      defaultRegion: "NG",
-      parseOnGet: false,
-    },
     profession: {
       type: String,
       required: [true, "Please provide profession"],
@@ -98,7 +83,11 @@ const UserSchema = new mongoose.Schema(
         default: "#",
       },
     },
-    details: detailsSchema,
+    about: {
+      type: String,
+      maxlength: 5000,
+      default: "",
+    },
     profileImage: {
       type: String,
     },
@@ -130,6 +119,7 @@ UserSchema.methods.comparePassword = async function (canditatePassword) {
   return isMatch;
 };
 
+// Unique Validator
 UserSchema.plugin(uniqueValidator, {
   message: "{PATH} already exist",
 });
